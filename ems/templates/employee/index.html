@@ -1,0 +1,71 @@
+{% extends 'base.html'%}
+{% load poll_extras %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-8">
+    {% if request.role == "Admin" or "HR" %}
+    <a class="btn btn-success float-right" href="{%  url 'employee_add' %}">Add employee</a>
+    {% endif %}
+
+    <h3> list of {{title}}  </h3>
+        <div class="table-responsive-sm">
+        {% if users %}
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Name</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <th scope="row">
+                            {{user.first_name}} {{user.last_name}}
+                            <span class="badge badge-default">{{user.email}}</span>
+                        </td>
+                        <td class="text-center">
+                            <a class="btn btn-primary" href="{%  url 'employee_details' user.id %}">Details</a>
+                            <a class="btn btn-warning" href="{%  url 'employee_edit' user.id %}">Edit</a>
+                            <a class="btn btn-danger" href="{%  url 'employee_delete' user.id %}">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+        {% else %}
+            <p>There is no employee available.</p>
+        {% endif %}
+            </div>
+    </div>
+    <div class="col-sm-4">
+        {% recent_polls as questions %}
+        <p>
+            <h4>Recent Polls..</h4>
+        </p>
+        {% if questions %}
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Poll</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for question in questions %}
+                    <tr>
+                        <th scope="row">
+                            <a href="{% url 'polls_details' question.id %}">{{question.title}}</a>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+        {% else %}
+            <p>There is no question available.</p>
+        {% endif %}
+    </div>
+    </div>
+{% endblock content %}
+</div>
